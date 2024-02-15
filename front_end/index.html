@@ -1,0 +1,27 @@
+<html>
+
+<head>
+  <title>1001 Nights</title>
+</head>
+
+<body>
+  <link rel="stylesheet" href="styles.css">
+  <div class="textbox-container">
+    <div class="textbox-title">Generated Story</div>
+    <hr>
+    <div class="info-text" id="info-text"></div>
+    <textarea class="input-text" id="input-text" contentEditable="false" placeholder="Type something here..."
+      oninput="onInput(this)">
+    </textarea>
+    <button class="continue-btn" id="continue-story-btn" onclick="continueStory()" title="Continue">Continue
+      Story...</button>
+    <div class="overlay" id="input-overlay">
+      <div class="loading-container">
+        <div class="loader"></div>
+      </div>
+    </div>
+  </div>
+  <script src="scripts.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,37 @@
+version: "3.1"
+
+responses:
+  utter_greet:
+  - text: "Hello there! Do you want to create enchanting and captivating stories together with an AI?"
+    metadata:
+      rephrase: false
+      rephrase_prompt: |
+        {{suggested_response}}
+
+  utter_cheer_up:
+  - text: "Here is something to cheer you up:"
+    image: "https://i.imgur.com/nGF1K8f.jpg"
+
+  utter_did_that_help:
+  - text: "Did that help you?"
+
+  utter_happy:
+  - text: "Great, carry on!"
+
+  utter_goodbye:
+  - text: "Bye"
+
+  utter_iamabot:
+  - text: "I am a bot, powered by Rasa."
+
+  utter_lets_start:
+  - text: "Let's start then!"
+
+  utter_indicate_input_field:
+  - text: "Just write something on the blank sheet in center of screen..."
+
+  utter_always_available:
+  - text: "No worries! You can come later when you wish."
+
+  utter_enjoy:
+  - text: "Have a great time!"
