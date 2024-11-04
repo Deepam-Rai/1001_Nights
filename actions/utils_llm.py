@@ -1,14 +1,11 @@
 import os
 import random
 from typing import Any, Text, Dict, List, Optional
-
-from rasa_sdk import Action, Tracker
-from rasa_sdk.executor import CollectingDispatcher
-
-from actions.api_llm.llms import HuggingFace
-from actions.constants import *
-
+from rasa_sdk import Tracker
+from actions.api_llm.huggingface import HuggingFace
 import logging
+
+from actions.api_llm.utils import query_llm
 
 logger = logging.getLogger(__name__)
 
@@ -61,10 +58,7 @@ def get_llm_rephrased(
         text_completion=True
 ) -> Text:
     updated_prompt = fill_prompt(prompt=prompt, suggested_response=fixed_response, tracker=tracker)
-    api_url = os.environ["LLM_API_URL"]
-    api_key = os.environ["LLM_API_KEY"]
-    llm_api = HuggingFace(api_url, api_key)
-    response = llm_api.get_text_completion(updated_prompt)
+    response = query_llm(updated_prompt)
     if text_completion is True:
         response = response.replace(updated_prompt,"")
         logger.debug(f"text completion response:\n{response}")
@@ -76,11 +70,8 @@ def get_llm_rephrased(
 def get_llm_completion(
         prompt: Text,
 ) -> Text:
-    api_url = os.environ["LLM_API_URL"]
-    api_key = os.environ["LLM_API_KEY"]
-    llm_api = HuggingFace(api_url, api_key)
-    response = llm_api.get_text_completion(prompt)
-    return response
+    return query_llm(prompt)
+
 
 def llm_rephrase_response(
         domain: Dict[Text, Any],

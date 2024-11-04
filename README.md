@@ -29,8 +29,8 @@ Training the Rasa chatbot:
 Run the project:
 1. Activate python environment.
 2. Set the Huggingface credentials as environment variables:
-   1. `set LLM_API_KEY=your_api_key`
-   2. `set LLM_API_URL=api_url` 
+   1. `set HUGGINGFACE_TOKEN=your_api_key`
+   2. `set HUGGINGFACE_API_URL=api_url` 
 3. Run rasa core server: `make -f Makefile run-server-debug`
 4. In another terminal run rasa action server: `rasa run actions --debug`
 5. Open the `index.html` file, thats inside folder `front_end`, in some browser.

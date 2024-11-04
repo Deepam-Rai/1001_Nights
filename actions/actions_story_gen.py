@@ -1,13 +1,11 @@
 from typing import Any, Text, Dict, List, Optional
-
 from rasa_sdk import Action, Tracker
 from rasa_sdk.events import SlotSet
 from rasa_sdk.executor import CollectingDispatcher
-
-from actions.actions_llm import llm_rephrase_response, get_llm_completion
+from actions.utils_llm import get_llm_completion
 from actions.constants import *
-
 import logging
+
 
 logger = logging.getLogger(__name__)
 
