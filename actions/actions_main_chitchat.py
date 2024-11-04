@@ -3,8 +3,6 @@ from rasa_sdk import Action, Tracker, ValidationAction
 from rasa_sdk.executor import CollectingDispatcher
 from rasa_sdk.types import DomainDict
 from actions.utils_llm import llm_rephrase_response
-from actions.api_llm.huggingface import HuggingFace
-from actions.constants import *
 import logging
 
 

@@ -2,10 +2,9 @@ import os
 import random
 from typing import Any, Text, Dict, List, Optional
 from rasa_sdk import Tracker
-from actions.api_llm.huggingface import HuggingFace
 import logging
-
 from actions.api_llm.utils import query_llm
+
 
 logger = logging.getLogger(__name__)
 
@@ -70,7 +69,9 @@ def get_llm_rephrased(
 def get_llm_completion(
         prompt: Text,
 ) -> Text:
-    return query_llm(prompt)
+    response = query_llm(prompt)
+    response = response.replace(prompt, "")
+    return response
 
 
 def llm_rephrase_response(

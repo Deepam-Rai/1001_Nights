@@ -1,3 +1,6 @@
+# this project
+actions/test.py
+
 # rasa
 /models/
 /.rasa/
