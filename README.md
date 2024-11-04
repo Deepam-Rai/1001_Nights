@@ -1,3 +1,11 @@
+----
+
+<div align="center">
+  <img src="https://img.shields.io/badge/Rasa-5A17EE?logo=rasa&logoColor=fff&style=plastic" alt="Rasa Badge" height="22">
+   <img src="https://img.shields.io/badge/Hugging%20Face-FFD21E?logo=huggingface&logoColor=000&style=plastic" alt="Hugging Face Badge" height="22">
+  <img src="https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=fff&style=plastic" alt="Python Badge" height="22">
+</div>
+
 # About
 This is a simple project with aim of using Rasa(Opensource), LLM API together with browser interface. Basically aim is to build a tool to help users create a story together with AI and a chatbot to help guide along the way.  
    
