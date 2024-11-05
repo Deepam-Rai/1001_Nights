@@ -1,0 +1,13 @@
+Below is an ongoing story that you and user has been building together:
+""" {{ current_story }} """
+
+Below is the latest request from the user:
+" {{ latest_message }} "
+
+Understand the user's request and provide a response in the following json format:
+{
+    "alter_story": <true/false>,  // true if user asked to make changes in the current story.
+    "add_story": <true/false>,  // true if user asked to do addition to the story without changing existing story.
+    "response": "<string>",  // your response to the user. If user asked to alter the story then populate this field with altered story. If user asked to add to story then populate this field with addition text to the story. If user's request does not pertain to the story then populate this field with a polite statement that you cannot fulfill the request.
+}
+Please generate the appropriate response  in the exact above format using the conversation context and user input.Do not include any explanations or additional text.

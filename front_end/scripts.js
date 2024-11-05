@@ -27,6 +27,7 @@ const INFO_MSGS = {
                 {
                     customData: { language: "en" },
                     socketUrl: "http://localhost:5005",
+                    initPayload: '/greet',
                     title: '1001',
                     subtitle: '',
                     // add other props here

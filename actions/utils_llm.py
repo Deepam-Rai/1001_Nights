@@ -1,3 +1,4 @@
+import json
 import os
 import random
 from typing import Any, Text, Dict, List, Optional
@@ -95,3 +96,28 @@ def llm_rephrase_response(
         response = get_llm_rephrased(prompt=prompt, fixed_response=fixed_response, tracker=tracker)
         return response
     return fixed_response
+
+
+def query_llm_json(prompt: Text, max_retry: int = 10, current_retry: int = 0) -> dict:
+    """
+    The same as query_llm() but retries if response cannot be parsed into json.
+    Args:
+        current_retry:
+        max_retry: Default 10.
+        prompt (object):
+    Returns parsed json as dict.
+    #TODO put pydantic validation for json parsing.
+    """
+    if current_retry > max_retry:
+        logger.error(f"max_retries exceeded for valid json type response. Returning empty dict.")
+        return {}
+    response = query_llm(prompt)
+    try:
+        as_dict = json.loads(response)
+        return as_dict
+    except (json.JSONDecodeError, TypeError, UnicodeDecodeError) as e:
+        logger.error(f"LLM response was not of valid json format. Error: {e}.\nRetrying({current_retry+1}/{max_retry}) again...")
+        return query_llm_json(prompt=prompt, current_retry=current_retry+1)
+    except Exception as e:
+        logger.error(f"Unforeseen error occurred, could not change llm response to dict. Error: {e}. Aborting.")
+        return {}

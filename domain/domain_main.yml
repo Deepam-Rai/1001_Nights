@@ -1,10 +1,5 @@
 version: "3.1"
 
-entities:
-  - user_add
-  - bot_add
-  - till_now
-
 intents:
   - greet
   - goodbye
@@ -13,24 +8,10 @@ intents:
   - mood_great
   - mood_unhappy
   - bot_challenge
-  - start_story_gen
-  - continue_story
-
-slots:
-  till_now:
-    type: text
-    influence_conversation: false
-    mappings:
-      - type: from_entity
-        entity: till_now
 
 actions:
-  - action_start_creation
-  - action_dont_want_creation
+  - action_handle_fallback
   - action_greet
-  # intent-action story gen approach
-  - action_continue_story
-  - action_validate_till_now
 
 session_config:
   session_expiration_time: 60

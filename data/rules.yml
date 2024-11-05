@@ -12,6 +12,11 @@ rules:
   - intent: bot_challenge
   - action: utter_iamabot
 
+- rule: Run customized action_handle_fallback on nlu_fallback
+  steps:
+    - intent: nlu_fallback
+    - action: action_handle_fallback
+
 #######################################
 - rule: Continue a story
   steps:
