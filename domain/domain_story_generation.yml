@@ -4,6 +4,7 @@ entities:
   - user_add
   - bot_add
   - till_now
+  - story_chat_sender_id
 
 intents:
   - start_story_gen
@@ -16,6 +17,12 @@ slots:
     mappings:
       - type: from_entity
         entity: till_now
+  story_chat_sender_id:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: story_chat_sender_id
 
 actions:
   - action_start_creation

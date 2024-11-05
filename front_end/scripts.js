@@ -9,34 +9,86 @@ const NO_BOT_UTTER = "no_bot_utter"
 const INFO_MSGS = {
     [DEFAULT]: "Oops! Something went wrong. Please try again later."
 }
+STORY_CHAT_SENDER_ID = "story_chat"
 
 
-!(function () {
+window.onload = function () {
+    /*
+        websocket connection for story chat
+        Clears local storage everytime page is refreshed.
+        After successful connection initiates side chat.
+    */
+    localStorage.clear();
+    const socket = io('http://localhost:5005', {
+        query: {
+            sender_id: "story_chat"
+        }
+    });
+    socket.on('connect', function (){
+        STORY_CHAT_SENDER_ID = socket.id
+        console.log("Connected story chat conversation sender_id:" + STORY_CHAT_SENDER_ID);
+        initiate_side_chat();
+    })
+    socket.on('connect_errors', function (){
+        console.error("Error connecting story chat conversation.");
+    })
+    socket.on('bot_uttered', function (response) {
+        console.log("Bot uttered:", response);
+        toggleGenInput(false);
+        document.getElementById(INPUT_TEXT).value += " " + response.text;
+        setInputTextHeight();
+        toggleGenInput(true);
+    });
+};
+
+
+function initiate_side_chat() {
     /**
      * Handles the chat message box.
      * Addition of message box on load up.
      * Also handles user and bot messages for the message box.
      */
-    let e = document.createElement("script"),
-        t = document.head || document.getElementsByTagName("head")[0];
-    (e.src =
-        "https://cdn.jsdelivr.net/npm/rasa-webchat/lib/index.js"),
-        (e.async = !0),
-        (e.onload = () => {
-            window.WebChat.default(
-                {
-                    customData: { language: "en" },
-                    socketUrl: "http://localhost:5005",
-                    initPayload: '/greet',
-                    title: '1001',
-                    subtitle: '',
-                    // add other props here
-                },
-                null
-            );
-        }),
-        t.insertBefore(e, t.firstChild);
-})();
+    let script = document.createElement("script");
+    const head = document.head || document.getElementsByTagName("head")[0];
+
+    script.src = "https://cdn.jsdelivr.net/npm/rasa-webchat/lib/index.js";
+    script.async = true;
+
+    script.onload = () => {
+        window.WebChat.default(
+            {
+                customData: { language: "en" },
+                socketUrl: "http://localhost:5005",
+
+                // The payload to send to the bot when the chat widget initializes
+                initPayload: `/greet{"story_chat_sender_id":"${STORY_CHAT_SENDER_ID}"}`,
+                title: '1001',
+                subtitle: '',
+                // Add any additional properties here
+            },
+            null
+        );
+    };
+    head.insertBefore(script, head.firstChild);
+    // Ensure not to load the same script if it already exists
+//    if (!document.querySelector('script[src="https://cdn.jsdelivr.net/npm/rasa-webchat/lib/index.js"]')) {
+//        head.insertBefore(script, head.firstChild);
+//    } else {
+//        // If the script is already loaded, directly call WebChat.default
+//        window.WebChat.default(
+//            {
+//                customData: { language: "en" },
+//                socketUrl: "http://localhost:5005",
+//
+//                initPayload: `/greet{"story_chat_sender_id":"${STORY_CHAT_SENDER_ID}"}`,
+//
+//                title: '1001',
+//                subtitle: '',
+//            },
+//            null
+//        );
+//    }
+}
 
 
 function setInputTextHeight(height = null) {
@@ -73,7 +125,7 @@ function toggleGenInput(flag = null) {
     document.getElementById(CONTINUE_STORY_BTN).disabled = !genInputs
     document.getElementById(INPUT_OVERLAY).style.display = genInputs ? "none" : "flex"
 }
-async function sendUserMessage(input, sender="default") {
+async function sendUserMessage(input, sender=STORY_CHAT_SENDER_ID) {
     /**
      * input: str, is whatever payload to be sent to the rasa backend.
      * This function wraps this payload and sends to rasa backend.
@@ -117,7 +169,7 @@ async function continueStory() {
     let tillNow = document.getElementById(INPUT_TEXT).value
     tillNow = '/continue_story{"till_now":"' + tillNow + '"}'
     try {
-        response = await sendUserMessage(tillNow, sender="story_chat");
+        response = await sendUserMessage(tillNow, sender=STORY_CHAT_SENDER_ID);
         if (response.length > 0) {
             bot_utter = await response[0]["text"]
             document.getElementById(INPUT_TEXT).value += " " + bot_utter
