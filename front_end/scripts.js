@@ -72,7 +72,7 @@ function toggleGenInput(flag = null) {
     document.getElementById(CONTINUE_STORY_BTN).disabled = !genInputs
     document.getElementById(INPUT_OVERLAY).style.display = genInputs ? "none" : "flex"
 }
-async function sendUserMessage(input) {
+async function sendUserMessage(input, sender="default") {
     /**
      * input: str, is whatever payload to be sent to the rasa backend.
      * This function wraps this payload and sends to rasa backend.
@@ -82,6 +82,7 @@ async function sendUserMessage(input) {
     myHeaders.append("Content-Type", "application/json");
 
     var raw = JSON.stringify({
+        "sender": sender,
         "message": input.trim(),
         "metadata": {}
     });
@@ -115,7 +116,7 @@ async function continueStory() {
     let tillNow = document.getElementById(INPUT_TEXT).value
     tillNow = '/continue_story{"till_now":"' + tillNow + '"}'
     try {
-        response = await sendUserMessage(tillNow);
+        response = await sendUserMessage(tillNow, sender="story_chat");
         if (response.length > 0) {
             bot_utter = await response[0]["text"]
             document.getElementById(INPUT_TEXT).value += " " + bot_utter
