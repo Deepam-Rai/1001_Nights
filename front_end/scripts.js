@@ -42,7 +42,7 @@ function handleBotUtteredEvent(data) {
         data = data.story_update;
         console.log("Story update from side-chat:", data);
         toggleGenInput(false);
-        document.getElementById(INPUT_TEXT).value += " " + data.response;
+        document.getElementById(INPUT_TEXT).value += " " + data.alter_story + data.add_story + data.response;
         setInputTextHeight();
         toggleGenInput(true);
     }
@@ -70,7 +70,7 @@ function initiate_side_chat() {
                 title: '1001',
                 subtitle: '',
                 onSocketEvent: {
-                    'bot_uttered': (data) => handleBotUtteredEvent(data)
+                    'bot_uttered': (data) => handleBotUtteredEvent(data),
                 }
             },
             null
