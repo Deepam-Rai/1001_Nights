@@ -9,80 +9,41 @@ nlu:
     - hello there
     - good morning
     - good evening
-    - moin
     - hey there
-    - hey dude
-    - goodmorning
-    - goodevening
     - good afternoon
 
 - intent: goodbye
   examples: |
-    - cu
-    - good by
-    - cee you later
+    - good bye
     - good night
     - bye
     - goodbye
     - have a nice day
     - see you around
-    - bye bye
     - see you later
+    - see ya
 
 - intent: affirm
   examples: |
     - yes
-    - y
+    - yeah
     - ok
     - sure
-    - indeed
-    - of course
-    - that sounds good
     - correct
+    - of course
+    - hell yea
+    - definitely yes
 
 - intent: deny
   examples: |
     - no
-    - n
+    - nah
     - never
-    - I don't think so
-    - don't like that
-    - no way
-    - not really
-
-- intent: mood_great
-  examples: |
-    - perfect
-    - great
-    - amazing
-    - feeling like a king
-    - wonderful
-    - I am feeling very good
-    - I am great
-    - I am amazing
-    - I am going to save the world
-    - super stoked
-    - extremely good
-    - so so perfect
-    - so good
-    - so perfect
-
-- intent: mood_unhappy
-  examples: |
-    - my day was horrible
-    - I am sad
-    - I don't feel very well
-    - I am disappointed
-    - super sad
-    - I'm so sad
-    - sad
-    - very sad
-    - unhappy
-    - not good
-    - not very good
-    - extremly sad
-    - so saad
-    - so sad
+    - nopes
+    - wrong
+    - i dont think so
+    - not at all
+    - definitely no
 
 - intent: bot_challenge
   examples: |
@@ -90,3 +51,7 @@ nlu:
     - are you a human?
     - am I talking to a bot?
     - am I talking to a human?
+    - are you a bot or a human?
+    - is this a robot?
+    - is this a human?
+    - what are you?

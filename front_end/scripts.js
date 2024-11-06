@@ -32,15 +32,21 @@ window.onload = function () {
     socket.on('connect_errors', function (){
         console.error("Error connecting story chat conversation.");
     })
-    socket.on('bot_uttered', function (response) {
-        console.log("Bot uttered:", response);
-        toggleGenInput(false);
-        document.getElementById(INPUT_TEXT).value += " " + response.text;
-        setInputTextHeight();
-        toggleGenInput(true);
-    });
 };
 
+function handleBotUtteredEvent(data) {
+    /*  Runs when bot utters on the side chat.
+        This function checks if the utter has any changes for the story chat, if yes then makes it.
+    */
+    if (data.story_update) {
+        data = data.story_update;
+        console.log("Story update from side-chat:", data);
+        toggleGenInput(false);
+        document.getElementById(INPUT_TEXT).value += " " + data.response;
+        setInputTextHeight();
+        toggleGenInput(true);
+    }
+}
 
 function initiate_side_chat() {
     /**
@@ -60,34 +66,17 @@ function initiate_side_chat() {
                 customData: { language: "en" },
                 socketUrl: "http://localhost:5005",
 
-                // The payload to send to the bot when the chat widget initializes
                 initPayload: `/greet{"story_chat_sender_id":"${STORY_CHAT_SENDER_ID}"}`,
                 title: '1001',
                 subtitle: '',
-                // Add any additional properties here
+                onSocketEvent: {
+                    'bot_uttered': (data) => handleBotUtteredEvent(data)
+                }
             },
             null
         );
     };
     head.insertBefore(script, head.firstChild);
-    // Ensure not to load the same script if it already exists
-//    if (!document.querySelector('script[src="https://cdn.jsdelivr.net/npm/rasa-webchat/lib/index.js"]')) {
-//        head.insertBefore(script, head.firstChild);
-//    } else {
-//        // If the script is already loaded, directly call WebChat.default
-//        window.WebChat.default(
-//            {
-//                customData: { language: "en" },
-//                socketUrl: "http://localhost:5005",
-//
-//                initPayload: `/greet{"story_chat_sender_id":"${STORY_CHAT_SENDER_ID}"}`,
-//
-//                title: '1001',
-//                subtitle: '',
-//            },
-//            null
-//        );
-//    }
 }
 
 

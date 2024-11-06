@@ -1,10 +1,12 @@
 {% if current_story.strip() != "" %}
 Below is an ongoing story:
-""" {{ current_story }} """
+"""
+{{ current_story }}
+"""
 
-Your need to continue this story and return the continuation as response. Do not make additions longer than two sentences.
-
+Your need to continue this story and return the continuation as response.
+Do not make additions longer than two sentences. Also don't put response within quotes, unless grammatically needed.
 {% else %}
-Start a new story. Use no more than two sentences.
-
+Start a new story with no longer than two sentences.
+Also don't put response within quotes, unless grammatically needed.
 {% endif %}
