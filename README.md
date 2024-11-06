@@ -67,4 +67,5 @@ OLLAMA_URL=http://localhost:11434/api/generate  # typical url
 5. Open the `index.html` file, located inside folder `front_end`, in any browser.
 
 ## Usage:
-1. Write some line in the center blank page and hit "Continue Story..."
+1. Write some line in the center blank page and hit _"Continue Story..."_ button.
+2. Or say something like, _"Lets create a thrilling war story!"_ in the side-chat!
