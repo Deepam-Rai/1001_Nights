@@ -5,20 +5,32 @@
 </head>
 
 <body>
-  <link rel="stylesheet" href="styles.css">
-  <div class="textbox-container">
-    <div class="textbox-title">Generated Story</div>
-    <hr>
-    <div class="info-text" id="info-text"></div>
-    <textarea class="input-text" id="input-text" contentEditable="false" placeholder="Type something here..."
-      oninput="onInput(this)">
-    </textarea>
-    <button class="continue-btn" id="continue-story-btn" onclick="continueStory()" title="Continue">Continue
-      Story...</button>
-    <div class="overlay" id="input-overlay">
-      <div class="loading-container">
-        <div class="loader"></div>
+  <link rel="stylesheet" href="styles/styles.css">
+  <div class="page-container">
+
+    <!-- Main content area for the generated story -->
+    <div class="textbox-container">
+      <div class="textbox-title">Generated Story</div>
+      <hr>
+      <div class="info-text" id="info-text"></div>
+      <textarea class="input-text" id="input-text" contentEditable="false" placeholder="Type something here..."
+        oninput="onInput(this)">
+      </textarea>
+      <button class="continue-btn" id="continue-story-btn" onclick="continueStory()" title="Continue">Continue
+        Story...</button>
+      <div class="overlay" id="input-overlay">
+        <div class="loading-container">
+          <div class="loader"></div>
+        </div>
       </div>
+    </div>
+
+    <!-- Chat interface area on the right side -->
+    <div class="chat-container">
+      <div class="chat-header">1001 Nights</div>
+      <div class="chat-messages" id="chat-messages"></div>
+      <textarea class="chat-input" id="chat-input" placeholder="Chat and build!"></textarea>
+      <button class="send-btn" id="send-chat-btn" onclick="sendMessage()">Send</button>
     </div>
   </div>
 

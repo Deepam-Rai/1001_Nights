@@ -3,21 +3,25 @@ const INPUT_TEXT = "input-text"
 const INPUT_OVERLAY = "input-overlay"
 const INFO_TEXT = "info-text"
 const CONTINUE_STORY_BTN = "continue-story-btn"
-const SERVER_HOST = "http://localhost:5005"
-const CORE_SERVER = SERVER_HOST + "/webhooks/rest/webhook"
+const SERVER_HOST = "http://localhost"
+const CORE_RASA_SERVER= SERVER_HOST + ":5005"
+const RASA_REST_ENDPOINT = CORE_RASA_SERVER + "/webhooks/rest/webhook"
 const DEFAULT = "default"
 const NO_BOT_UTTER = "no_bot_utter"
 const INFO_MSGS = {
     [DEFAULT]: "Oops! Something went wrong. Please try again later."
 }
 STORY_CHAT_SENDER_ID = "story_chat"
+SIDE_CHAT_SENDER_ID = "side_chat"
+USER = "user"
+BOT = "bot"
 
 
 window.onload = function () {
     /*
-        websocket connection for story chat
         Clears local storage everytime page is refreshed.
-        After successful connection initiates side chat.
+        websocket connection for story chat
+        websocket connection for side chat
     */
     localStorage.clear();
     initiate_story_chat();
@@ -27,51 +31,80 @@ window.onload = function () {
 
 // --------------------------------------------------------------------
 // side-chat code
-
+let side_socket;
 function initiate_side_chat() {
-    /**
-     * Handles the chat message box.
-     * Addition of message box on load up.
-     * Also handles user and bot messages for the message box.
-     */
-    let script = document.createElement("script");
-    const head = document.head || document.getElementsByTagName("head")[0];
-
-    script.src = "https://cdn.jsdelivr.net/npm/rasa-webchat/lib/index.js";
-    script.async = true;
-
-    script.onload = () => {
-        window.WebChat.default(
-            {
-                customData: { language: "en" },
-                socketUrl: SERVER_HOST,
-
-                initPayload: "/greet",
-                title: '1001',
-                subtitle: '',
-                onSocketEvent: {
-                    'bot_uttered': (data) => handleBotUtteredEvent(data),
-                }
-            },
-            null
-        );
-    };
-    head.insertBefore(script, head.firstChild);
+    /* Establishes side-chat conversation with rasa server
+    */
+    side_socket = io(CORE_RASA_SERVER);
+    side_socket.on('connect', function (){
+        STORY_CHAT_SENDER_ID = side_socket.id
+        console.log("Connected side chat conversation sender_id:" + SIDE_CHAT_SENDER_ID);
+    })
+    side_socket.on('connect_errors', function (){
+        console.error("Error connecting side chat conversation.");
+    })
+    side_socket.on('bot_uttered', function(data) {
+        const botMessage = data.text;
+        appendMessageToChat(botMessage, 'bot');
+        if (data.story_update) {
+            data = data.story_update;
+            console.log("Story update from side-chat:", data);
+            toggleGenInput(false);
+            document.getElementById(INPUT_TEXT).value += " " + data.alter_story + data.add_story + data.response;
+            setInputTextHeight();
+            toggleGenInput(true);
+        }
+    });
 }
 
 
-function handleBotUtteredEvent(data) {
-    /*  Runs when bot utters on the side chat.
-        This function checks if the utter has any changes for the story chat, if yes then makes it.
-    */
-    if (data.story_update) {
-        data = data.story_update;
-        console.log("Story update from side-chat:", data);
-        toggleGenInput(false);
-        document.getElementById(INPUT_TEXT).value += " " + data.alter_story + data.add_story + data.response;
-        setInputTextHeight();
-        toggleGenInput(true);
+document.getElementById('chat-input').addEventListener('keypress', function(event) {
+    if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();  // Prevent new line when only Enter is pressed; but allow shift+enter for newline
+        sendMessage();  // Send message
     }
+});
+
+
+function sendMessage() {
+    /*
+        Sends side-chat user message to bot.
+        Appends the user message to chat messages
+    */
+    const inputField = document.getElementById("chat-input");
+    const chatMessages = document.getElementById("chat-messages");
+
+    // Extract the message text
+    const messageText = inputField.value.trim();
+
+    // Check if the message is not empty
+    if (messageText !== "") {
+        // emit the message to rasa server
+        side_socket.emit('user_uttered', {
+            "message": messageText,
+            "sender_id": SIDE_CHAT_SENDER_ID
+        });
+        appendMessageToChat(messageText, USER);
+    }
+}
+
+
+function appendMessageToChat(message, sender) {
+    const chatMessages = document.getElementById('chat-messages');  // Reference to the chat messages container
+
+    // Create a new div to represent the message
+    const messageDiv = document.createElement('div');
+    messageDiv.classList.add('chat-message', sender);
+    messageDiv.textContent = message;
+
+    chatMessages.appendChild(messageDiv);
+
+    if (sender === USER) {
+        document.getElementById("chat-input").value = ""
+    }
+
+    // Scroll to the bottom of the chat container to show the latest message
+    chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
 
@@ -79,11 +112,7 @@ function handleBotUtteredEvent(data) {
 // story-chat code
 
 function initiate_story_chat() {
-    const socket = io('http://localhost:5005', {
-        query: {
-            sender_id: "story_chat"
-        }
-    });
+    const socket = io(CORE_RASA_SERVER);
     socket.on('connect', function (){
         STORY_CHAT_SENDER_ID = socket.id
         console.log("Connected story chat conversation sender_id:" + STORY_CHAT_SENDER_ID);

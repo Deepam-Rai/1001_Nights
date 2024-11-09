@@ -1,0 +1,238 @@
+@font-face {
+    font-family: 'BeyondWonderland';
+    src: url('./fonts/beyond-wonderland/Beyond Wonderland.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: url('./images/pexels-henry-&-co-1939485.jpg') center/cover no-repeat fixed;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+}
+
+.page-container {
+    display: flex;
+    height: 100%;
+    width: 100vw; /* Ensures full viewport width */
+    overflow: hidden;
+}
+
+/* Universal box-sizing for consistent width behavior */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+
+/* Chat header */
+.chat-header {
+  font-family: 'BeyondWonderland', serif;
+  font-size: 3.2em;
+  color: #007bff;
+  padding: 10px 0;
+  text-align: center;
+}
+
+/* Chat messages section */
+.chat-messages {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(200, 200, 200, 0.5);
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.chat-message {
+    background-color: rgba(255, 255, 255, 0.3);
+    color: #333;
+    padding: 8px;
+    margin-bottom: 10px; /* Space between messages */
+    border-radius: 8px;
+    max-width: 80%; /* Limit width to 80% of the container */
+    word-wrap: break-word; /* Ensure long words break to the next line */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    font-size: 16px;
+}
+
+/* Style for user (left) and bot (right) messages */
+.chat-message.user {
+    background-color: rgba(255, 255, 255, 0.8);
+    align-self: flex-end; /* Align user messages to the right */
+}
+
+.chat-message.bot {
+    background-color: rgba(255, 255, 255, 0.6);
+    align-self: flex-start; /* Align bot messages to the left */
+}
+
+/* Chat input field */
+.chat-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 5px;
+  resize: none;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+/* Send button */
+.send-btn {
+    width: 100%;
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+.send-btn:hover {
+    background-color: #2980b9;
+}
+
+
+/* Send button hover effect */
+.send-btn:hover {
+  background-color: #0056b3;
+}
+
+
+/* -------------------------------------------------------------------------
+   Generated story box styles
+ */
+
+.textbox-container {
+    width: 75%; /* Matches with chat container's 25% */
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease-in-out;
+    height: auto;
+    backdrop-filter: blur(5px);
+    box-sizing: border-box; /* Ensures width includes padding and borders */
+    overflow-y: auto; /* Add overflow-y to handle inner content scrolling if needed */
+}
+
+.textbox-container:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.input-text {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.3s ease-in-out;
+    height: auto;
+    resize: none;
+}
+
+.input-text:focus {
+    border-color: #3498db;
+}
+
+.textbox-title {
+    font-size: 17px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.info-text {
+    top: 20px;
+    left: 20px;
+    background-color: #e6f7ff;
+    color: #004080;
+    border: 1px solid #b3d9ff;
+    padding: 10px;
+    margin: 15px 0px 0px 0px;
+    font-size: 16px;
+    border-radius: 5px;
+    pointer-events: none;
+    visibility: hidden;
+}
+
+.continue-btn {
+    width: 100%;
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.continue-btn:hover {
+    background-color: #2980b9;
+}
+
+/* Chat container styling */
+.chat-container {
+    width: 25%;
+    background-color: rgba(255, 255, 255, 0.3);
+    display: flex;
+    flex-direction: column;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+/* Styles for Overlay when inputs are disabled. */
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.7);
+    filter: grayscale(100%);
+    z-index: 1;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Styles for loading animation inside overlay. */
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.loader {
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid #3498db;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
