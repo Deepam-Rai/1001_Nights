@@ -24,14 +24,14 @@ pipeline:
     constrain_similarities: true
     epochs: 100
   - name: FallbackClassifier
-    threshold: 0.8
+    threshold: 0.95
     ambiguity_threshold: 0.1
 
 policies:
    - name: MemoizationPolicy
      max_history: 5
    - name: RulePolicy
-     core_fallback_threshold: 0.8
+     core_fallback_threshold: 0.95
      core_fallback_action_name: "action_handle_fallback"
      enable_fallback_prediction: True
    - name: TEDPolicy

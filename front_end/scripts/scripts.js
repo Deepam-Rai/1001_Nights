@@ -171,25 +171,25 @@ async function sendStoryMessage(input, sender=STORY_CHAT_SENDER_ID) {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
-    var raw = JSON.stringify({
+    var raw = {
         "sender": sender,
         "message": input.trim(),
         "metadata": {}
-    });
-    console.log(raw)
+    };
+    console.log("sendStoryMessage:",raw);
     var requestOptions = {
         method: 'POST',
         headers: myHeaders,
-        body: raw,
+        body: JSON.stringify(raw),
         redirect: 'follow'
     };
     try {
         const response = await fetch(RASA_REST_ENDPOINT, requestOptions);
         const result = await response.json();
-        console.log("Bot response: ", result)
+        console.log("sendStoryMessage: Bot response: ", result)
         return result;
     } catch (error) {
-        console.error('Error: ', error);
+        console.error('sendStoryMessage: Error: ', error);
         throw error;
     }
 }

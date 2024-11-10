@@ -155,10 +155,6 @@ body {
     overflow-y: auto; /* Add overflow-y to handle inner content scrolling if needed */
 }
 
-.textbox-container:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
 .input-text {
     width: 100%;
     padding: 10px;
