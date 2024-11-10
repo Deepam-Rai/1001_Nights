@@ -50,14 +50,16 @@ function initiate_side_chat() {
     })
     side_socket.on('bot_uttered', function(data) {
         const botMessage = data.text;
-        appendMessageToChat(botMessage, 'bot');
         if (data.story_update) {
             data = data.story_update;
             console.log("Story update from side-chat:", data);
             toggleGenInput(false);
-            document.getElementById(INPUT_TEXT).value += " " + data.alter_story + data.add_story + data.response;
+            document.getElementById(INPUT_TEXT).value += " " + data.alter_story + data.add_story;
             setInputTextHeight();
             toggleGenInput(true);
+        }
+        else {
+            appendMessageToChat(botMessage, 'bot');
         }
     });
 }
