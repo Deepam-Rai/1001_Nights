@@ -13,14 +13,6 @@
 </div>
 
 ----
-# Demo
-
-
-https://github.com/user-attachments/assets/a6e1297f-c7c3-4a31-a67b-b2f6aacbe3e0
-
-
-
-----
 # About
 A story-creation tool where users can take assistance of AI bot via chat interface to build stories!  
 
@@ -31,6 +23,12 @@ Major technologies & techniques used:
    2. **Ollama:** Locally served.
 3. **Docker:** Containerization.
 4. **Prompt Engineering:** Guiding bot to understand user and build stories accordingly.
+
+----
+# Demo
+
+
+https://github.com/user-attachments/assets/a6e1297f-c7c3-4a31-a67b-b2f6aacbe3e0
 
 
 ----
