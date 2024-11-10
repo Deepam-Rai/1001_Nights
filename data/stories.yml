@@ -2,16 +2,7 @@ version: "3.1"
 
 stories:
 
-- story: user wants to create story
+- story: greet story
   steps:
   - intent: greet
   - action: action_greet
-  - intent: affirm
-  - action: action_start_creation
-
-- story: user doesnt want to create story
-  steps:
-  - intent: greet
-  - action: action_greet
-  - intent: deny
-  - action: utter_always_available

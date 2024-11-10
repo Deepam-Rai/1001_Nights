@@ -2,14 +2,40 @@ version: "3.1"
 
 intents:
   - greet
-  - goodbye
-  - affirm
-  - deny
-  - bot_challenge
+  - llm_general_intent
+  - start_story_gen
+  - continue_story
+
+
+entities:
+  - user_add
+  - bot_add
+  - till_now
+  - story_chat_sender_id
+
+
+slots:
+  till_now:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: till_now
+
+  story_chat_sender_id:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: story_chat_sender_id
+
 
 actions:
   - action_handle_fallback
   - action_greet
+  # intent-action story gen approach
+  - action_continue_story
+
 
 session_config:
   session_expiration_time: 60

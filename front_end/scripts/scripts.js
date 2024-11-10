@@ -54,7 +54,15 @@ function initiate_side_chat() {
             data = data.story_update;
             console.log("Story update from side-chat:", data);
             toggleGenInput(false);
-            document.getElementById(INPUT_TEXT).value += " " + data.alter_story + data.add_story;
+            if (data.alter_story) {
+                const current_story = document.getElementById(INPUT_TEXT);
+                let text = current_story.value;
+                text = text.replace(data.scoped_text.trim(), data.alter_story.trim());
+                current_story.value = text;
+            }
+            if (data.add_story) {
+                document.getElementById(INPUT_TEXT).value += " " + data.add_story
+            }
             setInputTextHeight();
             toggleGenInput(true);
         }
@@ -81,6 +89,8 @@ function sendSideMessage() {
     const inputField = document.getElementById("chat-input");
     const chatMessages = document.getElementById("chat-messages");
 
+    // Also sends the current story in metadata. #TODO optimize as sending whole story is an expensive operation
+    let tillNow = document.getElementById(INPUT_TEXT).value
     // Extract the message text
     const messageText = inputField.value.trim();
 
@@ -89,7 +99,10 @@ function sendSideMessage() {
         // emit the message to rasa server
         side_socket.emit('user_uttered', {
             "message": messageText,
-            "sender_id": SIDE_CHAT_SENDER_ID
+            "sender_id": SIDE_CHAT_SENDER_ID,
+            "metadata": {
+                "till_now": tillNow
+            }
         });
         appendMessageToChat(messageText, USER);
     }
@@ -146,8 +159,7 @@ function onInput(input) {
     handleNewAddition(this);
 }
 function handleNewAddition(input) {
-}
-function setInputTextReadOnly(flag) {
+}function setInputTextReadOnly(flag) {
     document.getElementById(INPUT_TEXT).readOnly = flag
 }
 let genInputs = true; // enabled/disabled state for inputs related to story generation
