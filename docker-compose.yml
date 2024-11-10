@@ -1,0 +1,37 @@
+services:
+  core-server:
+    image: 1001-nights-core:latest
+    build: .
+    container_name: 1001-core
+    ports:
+      - "5005:5005"
+    volumes:
+      - ./:/app
+    environment:
+      - RASA_TELEMETRY_ENABLED=false
+    command: bash -c "rasa run --enable-api --cors \"*\" --debug --model models/1001_nights_model.tar.gz --port \"5005\""
+    networks:
+      - all
+
+  action-server:
+    image: 1001-nights-core:latest
+    build: .
+    container_name: 1001-actions
+    volumes:
+      - ./actions:/app/actions
+    environment:
+      - RASA_TELEMETRY_ENABLED=false
+    env_file:
+      - .env
+    command: bash -c "rasa run actions --port \"5055\" --debug"
+    ports:
+      - "5055:5055"
+    networks:
+      - all
+
+
+networks:
+  all:
+    driver: bridge
+    driver_opts:
+      com.docker.network.enable_ipv6: "true"

@@ -1,0 +1,5 @@
+requests
+rasa==3.4.0
+websocket-client==1.6.1
+websockets==10.0
+jinja2

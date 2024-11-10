@@ -67,14 +67,6 @@ def get_llm_rephrased(
     return response
 
 
-def get_llm_completion(
-        prompt: Text,
-) -> Text:
-    response = query_llm(prompt)
-    response = response.replace(prompt, "")
-    return response
-
-
 def llm_rephrase_response(
         domain: Dict[Text, Any],
         tracker: Tracker,

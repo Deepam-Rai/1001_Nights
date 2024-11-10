@@ -156,6 +156,3 @@ crashlytics-build.properties
 fabric.properties
 /archive_models/
 /models_archive/
-
-# file that stores personal credentials
-creds_env_var.bat
