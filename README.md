@@ -12,6 +12,13 @@
    <img src="https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=fff&style=plastic" alt="Python Badge" height="22">
 </div>
 
+----
+# Demo
+
+
+https://github.com/user-attachments/assets/a6e1297f-c7c3-4a31-a67b-b2f6aacbe3e0
+
+
 
 ----
 # About
@@ -137,4 +144,4 @@ Size: 5.9 GB
 The project currently only uses `/api/generate` endpoint.
 
 Basic architecture:  
-![architecture](.\images\1001 Nights Architecture.png)
+![architecture](./images/1001%20Nights%20Architecture.png)
