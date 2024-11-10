@@ -108,3 +108,33 @@ You can:
 - Or say something like, _"Lets create a thrilling war story!"_ in the side-chat!
 - Or write starting of story in center-story-page and ask bot to add to story in chat!
 - You can also ask bot to change any detail, story, whatever in the recent(last two sentences - default settings) part of the story.
+
+
+---
+# Technical details
+The built docker image would have size around `2.53 GB`.
+
+LLM model used:
+```shell
+llama3.1:
+  Model
+    architecture        llama
+    parameters          8.0B
+    context length      131072
+    embedding length    4096
+    quantization        Q4_0
+
+  Parameters
+    stop    "<|start_header_id|>"
+    stop    "<|end_header_id|>"
+    stop    "<|eot_id|>"
+
+  License
+    LLAMA 3.1 COMMUNITY LICENSE AGREEMENT
+    Llama 3.1 Version Release Date: July 23, 2024
+Size: 5.9 GB
+```
+The project currently only uses `/api/generate` endpoint.
+
+Basic architecture:  
+![architecture](.\images\1001 Nights Architecture.png)
