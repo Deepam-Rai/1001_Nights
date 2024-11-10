@@ -116,8 +116,11 @@ def query_llm_json(prompt: Text, max_retry: int = 10, current_retry: int = 0) ->
         as_dict = json.loads(response)
         return as_dict
     except (json.JSONDecodeError, TypeError, UnicodeDecodeError) as e:
-        logger.error(f"LLM response was not of valid json format. Error: {e}.\nRetrying({current_retry+1}/{max_retry}) again...")
+        logger.error(
+            f"query-llm-json: LLM response was not of valid json format. Retrying({current_retry+1}/{max_retry})..."
+            f"\nERROR: {e}"
+        )
         return query_llm_json(prompt=prompt, current_retry=current_retry+1)
     except Exception as e:
-        logger.error(f"Unforeseen error occurred, could not change llm response to dict. Error: {e}. Aborting.")
+        logger.error(f"query-llm-json: Unforeseen error occurred, could not change llm response to dict. Error: {e}")
         return {}

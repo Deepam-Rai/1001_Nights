@@ -18,44 +18,13 @@ def query_llm(prompt: Text):
     llm_error = False
     llm_service = os.environ["LLM_SERVICE"]
     if llm_service == "OLLAMA":
-        model = os.environ["OLLAMA_MODEL"]
-        url = os.environ["OLLAMA_URL"]
-        if model is None or url is None:
-            logger.error(f"OLLAMA environment variables not set: [OLLAMA_MODEL, OLLAMA_URL]")
-            return ""
-        data = {
-            "model": model,
-            "prompt": prompt,
-            "stream": False
-        }
-        headers = {
-            "Content-Type": "application/json"
-        }
-        response = requests.post(url=url, headers=headers, data=json.dumps(data))
-        if response.status_code == 200:
-            llm_response = response.json()['response']
-        else:
-            logger.error(f"Error querying OLLAMA; response: {response.json()}")
+        llm_response = query_ollama(prompt)
+        if llm_response is None:
             llm_error = True
             llm_response = ""
     elif llm_service == "HUGGINGFACE":
-        api_url = os.environ["HUGGINGFACE_API_URL"]
-        api_key = os.environ["HUGGINGFACE_TOKEN"]
-        if api_url is None or api_key is None:
-            logger.error(f"HUGGINGFACE environment variables not set: [HUGGINGFACE_API_URL, HUGGINGFACE_TOKEN]")
-            llm_error = True
-            llm_response = ""
-        response = requests.post(
-            url=api_url,
-            headers={"Authorization": f"Bearer {api_key}"},
-            json={
-               "inputs": prompt,
-            }
-        )
-        if response.status_code == 200:
-            llm_response = response.json()[0].get("generated_text")
-        else:
-            logger.error(f"Error querying HUGGINGFACE; response: {response.json()}")
+        llm_response = query_huggingface(prompt)
+        if llm_response is None:
             llm_error = True
             llm_response = ""
     else:
@@ -73,3 +42,67 @@ def query_llm(prompt: Text):
             log_file.write(llm_response)
         log_file.write(f"\n{'*' * 7}***  END  ***{'*' * 7}\n")
     return llm_response
+
+
+def query_ollama(prompt) -> str or None:
+    """
+    Assumes that the required environment variables are set.
+    Args:
+        prompt:
+
+    Returns:
+    """
+    model = os.environ["OLLAMA_MODEL"]
+    url = os.environ["OLLAMA_URL"]
+    if model is None or url is None:
+        logger.error(f"OLLAMA environment variables not set: [OLLAMA_MODEL, OLLAMA_URL]")
+        return None
+    data = {
+        "model": model,
+        "prompt": prompt,
+        "stream": False
+    }
+    headers = {
+        "Content-Type": "application/json"
+    }
+    try:
+        response = requests.post(url=url, headers=headers, data=json.dumps(data))
+        if response.status_code == 200:
+            return response.json()['response']
+        else:
+            logger.error(f"Error querying OLLAMA; response: {response.json()}")
+            return None
+    except Exception as e:
+        logger.error(f"query-ollama: Error querying: {e}")
+        return None
+
+
+def query_huggingface(prompt: str) -> str or None:
+    """
+    Assumes required env vars are set.
+    Args:
+        prompt:
+
+    Returns:
+    """
+    api_url = os.environ["HUGGINGFACE_API_URL"]
+    api_key = os.environ["HUGGINGFACE_TOKEN"]
+    if api_url is None or api_key is None:
+        logger.error(f"HUGGINGFACE environment variables not set: [HUGGINGFACE_API_URL, HUGGINGFACE_TOKEN]")
+        return None
+    try:
+        response = requests.post(
+            url=api_url,
+            headers={"Authorization": f"Bearer {api_key}"},
+            json={
+                "inputs": prompt,
+            }
+        )
+        if response.status_code == 200:
+            return response.json()[0].get("generated_text")
+        else:
+            logger.error(f"Error querying HUGGINGFACE; response: {response.json()}")
+            return None
+    except Exception as e:
+        logger.error(f"query-huggingface: Querying error: {e}")
+        return None

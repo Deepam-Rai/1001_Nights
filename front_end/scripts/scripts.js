@@ -38,10 +38,15 @@ function initiate_side_chat() {
     side_socket = io(CORE_RASA_SERVER);
     side_socket.on('connect', function (){
         STORY_CHAT_SENDER_ID = side_socket.id
-        console.log("Connected side chat conversation sender_id:" + SIDE_CHAT_SENDER_ID);
+        console.log("side-chat: Connected side chat conversation sender_id:" + SIDE_CHAT_SENDER_ID);
+        side_socket.emit("user_uttered", {
+            "message": "/greet",
+            "sender_id": SIDE_CHAT_SENDER_ID
+        });
+        console.log("side-chat: Sent initiation message.")
     })
     side_socket.on('connect_errors', function (){
-        console.error("Error connecting side chat conversation.");
+        console.error("side-chat: Error connecting side chat conversation.");
     })
     side_socket.on('bot_uttered', function(data) {
         const botMessage = data.text;
@@ -61,12 +66,12 @@ function initiate_side_chat() {
 document.getElementById('chat-input').addEventListener('keypress', function(event) {
     if (event.key === 'Enter' && !event.shiftKey) {
         event.preventDefault();  // Prevent new line when only Enter is pressed; but allow shift+enter for newline
-        sendMessage();  // Send message
+        sendSideMessage();  // Send message
     }
 });
 
 
-function sendMessage() {
+function sendSideMessage() {
     /*
         Sends side-chat user message to bot.
         Appends the user message to chat messages
@@ -156,8 +161,9 @@ function toggleGenInput(flag = null) {
     document.getElementById(CONTINUE_STORY_BTN).disabled = !genInputs
     document.getElementById(INPUT_OVERLAY).style.display = genInputs ? "none" : "flex"
 }
-async function sendUserMessage(input, sender=STORY_CHAT_SENDER_ID) {
+async function sendStoryMessage(input, sender=STORY_CHAT_SENDER_ID) {
     /**
+     * REST POST request for story-chat.
      * input: str, is whatever payload to be sent to the rasa backend.
      * This function wraps this payload and sends to rasa backend.
      * The response is jsonized and returned.
@@ -178,7 +184,7 @@ async function sendUserMessage(input, sender=STORY_CHAT_SENDER_ID) {
         redirect: 'follow'
     };
     try {
-        const response = await fetch("http://localhost:5005/webhooks/rest/webhook", requestOptions);
+        const response = await fetch(RASA_REST_ENDPOINT, requestOptions);
         const result = await response.json();
         console.log("Bot response: ", result)
         return result;
@@ -200,7 +206,7 @@ async function continueStory() {
     let tillNow = document.getElementById(INPUT_TEXT).value
     tillNow = '/continue_story{"till_now":"' + tillNow + '"}'
     try {
-        response = await sendUserMessage(tillNow, sender=STORY_CHAT_SENDER_ID);
+        response = await sendStoryMessage(tillNow, sender=STORY_CHAT_SENDER_ID);
         if (response.length > 0) {
             bot_utter = await response[0]["text"]
             document.getElementById(INPUT_TEXT).value += " " + bot_utter
