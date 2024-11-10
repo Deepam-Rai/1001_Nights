@@ -49,6 +49,7 @@ function initiate_side_chat() {
         console.error("side-chat: Error connecting side chat conversation.");
     })
     side_socket.on('bot_uttered', function(data) {
+        removeLoadingMessage();
         const botMessage = data.text;
         if (data.story_update) {
             data = data.story_update;
@@ -79,7 +80,11 @@ document.getElementById('chat-input').addEventListener('keypress', function(even
         sendSideMessage();  // Send message
     }
 });
-
+document.getElementById('chat-input').addEventListener('input', function() {
+    // Automatically resize the side-chat input as user types
+    this.style.height = 'auto';
+    this.style.height = (this.scrollHeight) + 'px';
+});
 
 function sendSideMessage() {
     /*
@@ -105,6 +110,7 @@ function sendSideMessage() {
             }
         });
         appendMessageToChat(messageText, USER);
+        showLoadingMessage();
     }
 }
 
@@ -120,11 +126,49 @@ function appendMessageToChat(message, sender) {
     chatMessages.appendChild(messageDiv);
 
     if (sender === USER) {
-        document.getElementById("chat-input").value = ""
+        side_chat_input = document.getElementById("chat-input")
+        side_chat_input.value = "";
+        side_chat_input.style.height = 'auto';
     }
 
     // Scroll to the bottom of the chat container to show the latest message
     chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+let loadingInterval = null;
+let loadingMessageId = null;
+function showLoadingMessage(){
+    const chatMessages = document.getElementById('chat-messages');
+    const loadingDiv = document.createElement('div');
+    loadingDiv.classList.add('chat-message', 'bot', 'loading-message');
+    loadingDiv.id = 'loading-message';
+    loadingDiv.textContent = '.';
+    chatMessages.appendChild(loadingDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    loadingMessageId = loadingDiv.id;
+
+    let loadCount = 0;
+    loadingInterval = setInterval(() => {
+        loadCount = (loadCount + 1) % 4;
+        if (loadCount === 3) {
+            const emojis = ['🤔','🤨','🤯','🧐','😵','‍🧠','💭'];
+            const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+            loadingDiv.textContent += randomEmoji;
+        }
+        else {
+            loadingDiv.textContent = '.' + '.'.repeat(loadCount);
+        }
+    }, 500);  // update in ms
+}
+function removeLoadingMessage() {
+    if (loadingMessageId) {
+        const loadingMessage = document.getElementById(loadingMessageId);
+        if (loadingMessage) loadingMessage.remove();
+    }
+    if (loadingInterval) {
+        clearInterval(loadingInterval);
+        loadingInterval = null;
+    }
 }
 
 

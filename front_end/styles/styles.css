@@ -48,7 +48,7 @@ body {
 .chat-header {
   font-family: 'BeyondWonderland', serif;
   font-size: 3.2em;
-  color: #007bff;
+  color: #e3242b;
   padding: 10px 0;
   text-align: center;
 }
@@ -69,11 +69,12 @@ body {
 .chat-message {
     background-color: rgba(255, 255, 255, 0.3);
     color: black;
-    padding: 10px 20px;
-    letter-spacing: 0.6px;
+    width: 94%;
+    padding: 18px 18px;
+    letter-spacing: 0.7px;
     line-height: 20px;
     word-wrap: break-word;
-    font-size: 13px;
+    font-size: 16px;
     margin-bottom: 10px; /* Space between messages */
     border-radius: 8px;
 }
@@ -99,12 +100,12 @@ body {
   width: 100%;
   padding: 10px;
   margin-bottom: 5px;
-  resize: none;
   border: 1px solid rgba(200, 200, 200, 0.5);
   border-radius: 8px;
   outline: 0px;
   color: rgb(37, 45, 64);
-  font-size: 14px;
+  font-family: sans-serif;
+  font-size: 16px;
   font-weight: 400;
   line-height: 20px;
   letter-spacing: 0.6px;
@@ -113,6 +114,10 @@ body {
   justify-content: space-between;
   padding-left: 16px;
   padding-right: 16px;
+  overflow-y: auto;
+  resize: none;  /* disables manual resizing */
+  transition: height 0.2s ease;  /* Smooth height adjustment */
+  max-height: 150px;
 }
 
 /* Send button */
@@ -137,6 +142,12 @@ body {
   background-color: #0056b3;
 }
 
+.loading-message {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #444;
+}
+
 
 /* -------------------------------------------------------------------------
    Generated story box styles
@@ -149,6 +160,7 @@ body {
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: box-shadow 0.3s ease-in-out;
+    font-family: 'Georgia';
     height: auto;
     backdrop-filter: blur(5px);
     box-sizing: border-box; /* Ensures width includes padding and borders */
@@ -156,6 +168,11 @@ body {
 }
 
 .input-text {
+    font-family: 'Georgia';
+    font-size: 16px;
+    font-weight: 200;
+    line-height: 20px;
+    letter-spacing: 0.6px;
     width: 100%;
     padding: 10px;
     border: none;
